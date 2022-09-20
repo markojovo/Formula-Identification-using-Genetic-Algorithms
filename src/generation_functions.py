@@ -86,16 +86,16 @@ class generation:
 TODO SEPT 19 2022:
 As per 1801.02335,
 
-Clean Repo of everything not needed / clean up structures and names
+Clean Repo of everything not needed / clean up structures, names, error checking, random generation constants, limits and stuff
 
 Algorithm Updates:
 0. Get fitness-ordered set of candidates
 
 1. Crossover Parent Selection:
-    - Rank selection:
+    - Tournament Selection:
         - Choose n candidates at random from whole list (higher n is less variation?)
         - select best 2, or have some weighted probability based on fitness for best 2 (Rank Selection?)
-    - Rank selection:
+    - Rank Selection:
         - Make "roulette wheel" with pi slice areas proportional to rank
         - ie randomly generate int between 1 and sum_max
             - where area_0 + area_1 + area_2 + ... + area_N = sum_max
