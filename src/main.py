@@ -1,8 +1,5 @@
 
-from random import sample
 import matplotlib.pyplot as plt
-from numpy import var
-from scipy import rand
 from datatesting import extract_data
 from function_tree import evaluate, to_lisp, get_random_func
 from genetic_operators import cut_and_grow, shrink, hoist, crossover
@@ -67,7 +64,7 @@ try:
         best_candidate = gen.get_best_candidate()
         print("Best Candidate: "+to_lisp(gen.get_best_candidate()))
         print("Longest candidate length: "+ str(gen.get_longest_candidate()))
-        score = gen.temp_fitness(gen.get_best_candidate(), variables)
+        score = gen.get_fitness(gen.get_best_candidate(), variables)
             #abs( evaluate(gen.get_best_candidate(), variables) - TARGET_VAL)
 
 
@@ -102,7 +99,7 @@ output_array = []
 lowest_score = float_info.max
 best_cand_of_runs = best_of_runs[0]
 for l in best_of_runs:
-    curr_score = gen.temp_fitness(l, variables)
+    curr_score = gen.get_fitness(l, variables)
     if curr_score < lowest_score:
         lowest_score = curr_score
         best_cand_of_runs = l
