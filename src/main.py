@@ -54,8 +54,7 @@ exit_flag = False
     if exit_flag:
         continue'''
 gen = generation(2500, variables, input_array)
-#try:
-if (True):
+try:
     while(True):
 
 
@@ -71,17 +70,16 @@ if (True):
         if score/sum(i*i for i in input_array) < 0.01: # if you reach 1% error, break
             break
         print()
-            #gen.evolve(1,0.4,0)
-        gen.evolve(1, 0.8, 0.1)
+        gen.evolve(1, 0.5, 0.3)
         genNum = genNum + 1
         if (genNum > MAX_GEN_NUM):
             best_of_runs.append(best_candidate)
             genNum = 0
             break
-#except: TypeError:
-#    pass
-#except KeyboardInterrupt:
-    #pass
+except TypeError:
+    pass
+except KeyboardInterrupt:
+    pass
 
 best_of_runs.append(best_candidate)
 

@@ -37,7 +37,7 @@ class generation:
         new_func_list = []
 
 
-        ############### REWRITE ######################
+        #####################################
         # Elitism
         for i in range(elitism_amount):
             elite_specimen = prev_func_list.pop(0)[2]
@@ -50,16 +50,27 @@ class generation:
             crossRandom = random() # Random float from 0 to 1
             mutRandom = random()
 
-            if (crossRandom < crossover_probability/2 and len(prev_func_list) > 1):
+            if (crossRandom < crossover_probability/2 and len(prev_func_list) > 25):
                 performingCrossover = True
-                [tree_A, tree_B] = tournamentSelect(prev_func_list, 10, 2)
+                [tree_A, tree_B] = tournamentSelect(prev_func_list, 25, 2)
                 prev_func_list.remove(tree_A)
                 prev_func_list.remove(tree_B)
-                [new_tree_A, new_tree_B] = crossover(tree_A, tree_B)
+                new_tree_A = tree_A[2]
+                new_tree_B = tree_B[2]
+                [new_tree_A, new_tree_B] = crossover(new_tree_A, new_tree_B)
+
+                if (len(to_lisp(new_tree_A)) > 50):
+                    new_tree_A = get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1))
+                if (len(to_lisp(new_tree_B)) > 50):
+                    new_tree_A = get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1))
             else:
                 performingCrossover = False
-                new_tree_A = choice(prev_func_list)
-                prev_func_list.remove(new_tree_A)
+                tree_A = choice(prev_func_list)
+                prev_func_list.remove(tree_A)
+                new_tree_A = tree_A[2]
+                if (len(to_lisp(new_tree_A)) > 50):
+                    new_tree_A = get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1))
+
 
 
             if (mutRandom < mutation_probability):
@@ -72,8 +83,7 @@ class generation:
                     self.add_to_generation(new_func_list, new_tree_B)
 
 
-            #if (len(to_lisp(tree_A)) > 50):
-            #    self.add_to_generation(new_func_list, get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1)))
+
 
         ##############################################
 
@@ -86,7 +96,7 @@ class generation:
             sum_fitness = 0
             for i in range(len(self.TARGET_VALS)):
                 variables['x'] = i
-                sum_fitness = sum_fitness + (self.TARGET_VALS[i] - evaluate(temp_func, variables))**2 #+ 0.05*len(to_lisp(temp_func))
+                sum_fitness = sum_fitness + (self.TARGET_VALS[i] - evaluate(temp_func, variables))**2 + 0.05*len(to_lisp(temp_func))
             sum_fitness = sum_fitness + len(to_lisp(temp_func))
             return sum_fitness
         except OverflowError:

@@ -58,7 +58,7 @@ def to_lisp(subtree: FunctionTree) -> str:
 def get_random_func(values: Dict[str, float], max_depth: int = MAX_DEPTH, startFlag: bool = True) -> Dict:
     leaf_prob = 1.0 / max_depth
     if random() < leaf_prob or max_depth <= 1:  # generate a constant / variable
-        if random() < 0.5 or startFlag: # generate a variable leaf
+        if random() < 0.7 or startFlag: # generate a variable leaf
             rand_var = choice(list(values.keys()))
             return { NAME_KEY: rand_var, CHILDREN_KEY: None, VALUE_KEY: None }
         rand_val = get_random_constant()
