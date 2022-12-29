@@ -1,9 +1,6 @@
-from locale import currency
 from typing import Dict
 from random import random, randint, choice, randrange, gauss
-from numpy import cumproduct
 
-from sympy import C
 from function_tree import (
     FunctionTree, get_random_func, get_random_constant, CHILDREN_KEY, NAME_KEY, MAX_DEPTH, 
     CONSTANT_NAME, VALUE_KEY)

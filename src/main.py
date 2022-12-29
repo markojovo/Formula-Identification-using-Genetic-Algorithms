@@ -43,9 +43,6 @@ for i in range(1000):
 
 
 genNum = 1
-
-base_cross_ratio = 0.01
-base_rep_ratio = 0.0 
 MAX_GEN_NUM = 150000
 num_of_gens = 1
 
@@ -57,13 +54,15 @@ exit_flag = False
     if exit_flag:
         continue'''
 gen = generation(2500, variables, input_array)
-try:
+#try:
+if (True):
     while(True):
-        cross_ratio = base_cross_ratio*(2/1+exp(-genNum/MAX_GEN_NUM)) - base_cross_ratio
+
+
         print("Generation Number: " +str(genNum))
         best_candidate = gen.get_best_candidate()
         print("Best Candidate: "+to_lisp(gen.get_best_candidate()))
-        print("Longest candidate length: "+ str(gen.get_longest_candidate()))
+        #print("Longest candidate length: "+ str(gen.get_longest_candidate()))
         score = gen.get_fitness(gen.get_best_candidate(), variables)
             #abs( evaluate(gen.get_best_candidate(), variables) - TARGET_VAL)
 
@@ -73,24 +72,18 @@ try:
             break
         print()
             #gen.evolve(1,0.4,0)
-        gen.evolve(1,cross_ratio,0)
+        gen.evolve(1, 0.8, 0.1)
         genNum = genNum + 1
         if (genNum > MAX_GEN_NUM):
             best_of_runs.append(best_candidate)
             genNum = 0
             break
-except TypeError:
-    pass
-except KeyboardInterrupt:
-    pass
-    #continue
-    '''except KeyboardInterrupt:
-        exit_flag = True
-        break'''
+#except: TypeError:
+#    pass
+#except KeyboardInterrupt:
+    #pass
 
 best_of_runs.append(best_candidate)
-
-
 
 print("Randomly Generated Function: " + to_lisp(best_candidate))
 print(f"Evaluate Results: {evaluate(best_candidate, variables)}")
@@ -110,7 +103,7 @@ for i in range(len(input_array)):
     #output_array.append(evaluate(best_cand_of_runs, variables))
     output_array.append(evaluate(best_candidate, variables))
 
-print(best_of_runs)
+#print(best_of_runs)
 
 print("Best Total Candidate: "+to_lisp(best_cand_of_runs))
 

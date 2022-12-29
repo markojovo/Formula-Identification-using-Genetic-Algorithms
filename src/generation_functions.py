@@ -1,7 +1,8 @@
 from sys import float_info
-from random import random, randint, gauss
+from random import random, randint, gauss, choice
 from function_tree import FunctionTree, get_random_func, evaluate, CHILDREN_KEY, NAME_KEY, to_lisp, MAX_DEPTH
 from genetic_operators import crossover, random_mutation
+from upgradedSelections import tournamentSelect
 #from main import TARGET_VAL
 
 
@@ -31,7 +32,7 @@ class generation:
     def get_best_candidate(self):
             return sorted(self.funcs_list)[0][2]
 
-    def evolve(self, elitism_amount, crossover_probability, replication_probability): #rest are mutated  
+    def evolve(self, elitism_amount, crossover_probability, mutation_probability): #rest are mutated  
         prev_func_list = sorted(self.funcs_list.copy()) #Sorted by score
         new_func_list = []
 
@@ -43,27 +44,36 @@ class generation:
             self.add_to_generation(new_func_list, elite_specimen)
             #self.add_to_generation(new_func_list, elite_specimen)
             
+
         # Genetic Operators
         while(len(prev_func_list) > 0):
-            ratio = random() # Random float from 0 to 1
-            tree_A = prev_func_list.pop(0)[2]
+            crossRandom = random() # Random float from 0 to 1
+            mutRandom = random()
 
-            if (len(to_lisp(tree_A)) > 50):
-                self.add_to_generation(new_func_list, get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1)))
-
-            elif (ratio < crossover_probability / 2 and len(prev_func_list) > 1):
-                tree_B = prev_func_list.pop(randint(0, len(prev_func_list)-1 ))[2] #select another random item from list
+            if (crossRandom < crossover_probability/2 and len(prev_func_list) > 1):
+                performingCrossover = True
+                [tree_A, tree_B] = tournamentSelect(prev_func_list, 10, 2)
+                prev_func_list.remove(tree_A)
+                prev_func_list.remove(tree_B)
                 [new_tree_A, new_tree_B] = crossover(tree_A, tree_B)
-
-                self.add_to_generation(new_func_list, new_tree_A)
-                self.add_to_generation(new_func_list, new_tree_B)
-
-
-            elif (ratio < (replication_probability + crossover_probability/2)):
-                self.add_to_generation(new_func_list, tree_A)
-
             else:
-                self.add_to_generation(new_func_list, random_mutation(tree_A, self.variables))
+                performingCrossover = False
+                new_tree_A = choice(prev_func_list)
+                prev_func_list.remove(new_tree_A)
+
+
+            if (mutRandom < mutation_probability):
+                self.add_to_generation(new_func_list, random_mutation(new_tree_A, self.variables))
+                if (performingCrossover):
+                    self.add_to_generation(new_func_list, random_mutation(new_tree_B, self.variables))        
+            else:
+                self.add_to_generation(new_func_list, new_tree_A)
+                if (performingCrossover):
+                    self.add_to_generation(new_func_list, new_tree_B)
+
+
+            #if (len(to_lisp(tree_A)) > 50):
+            #    self.add_to_generation(new_func_list, get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1)))
 
         ##############################################
 
@@ -82,34 +92,5 @@ class generation:
         except OverflowError:
             return float_info.max
 
-'''
-TODO SEPT 19 2022:
-As per 1801.02335,
 
-Clean Repo of everything not needed / clean up structures, names, error checking, random generation constants, limits and stuff
 
-Algorithm Updates:
-0. Get fitness-ordered set of candidates
-
-1. Crossover Parent Selection:
-    - Tournament Selection:
-        - Choose n candidates at random from whole list (higher n is less variation?)
-        - select best 2, or have some weighted probability based on fitness for best 2 (Rank Selection?)
-    - Rank Selection:
-        - Make "roulette wheel" with pi slice areas proportional to rank
-        - ie randomly generate int between 1 and sum_max
-            - where area_0 + area_1 + area_2 + ... + area_N = sum_max
-            - and area_0 = 1, area_2 = 1/2, area_3 = 1/3... (or something similar)
-    - Good Resource to Look At:
-                http://www.ijmlc.org/papers/146-C00572-005.pdf
-
-2. Crossovers (high [ie 85%] chance for crossovers):
-    - use SBC (select best crossover)
-        - Perform many crossovers of different variations between the two parents 
-            (Need to somehow get set of all possible crossovers and choose from that, removing for each one completed)
-        - Select the best 2 children from this set to be sent into the next step for mutation
-
-3. Mutations (low [ie 5%] chance for mutations):
-    - chance to apply to all candidates at this stage, whether crossovered or passed-through
-
-'''
