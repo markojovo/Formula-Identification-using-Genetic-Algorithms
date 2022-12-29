@@ -57,7 +57,7 @@ class generation:
                 prev_func_list.remove(tree_B)
                 new_tree_A = tree_A[2]
                 new_tree_B = tree_B[2]
-                [new_tree_A, new_tree_B] = crossover(new_tree_A, new_tree_B)
+                [new_tree_A, new_tree_B] = self.select_best_crossover(new_tree_A, new_tree_B, 10)
 
                 if (len(to_lisp(new_tree_A)) > 50):
                     new_tree_A = get_random_func(self.variables,round(abs(gauss(MAX_DEPTH-1,2))+1))
@@ -101,6 +101,25 @@ class generation:
             return sum_fitness
         except OverflowError:
             return float_info.max
+
+
+    def select_best_crossover(self, rootA, rootB, numCrossovers):
+        currBestScore = float_info.max
+        bestA = rootA
+        bestB = rootB
+        for _ in range(numCrossovers):
+            [a,b] = crossover(rootA.copy(), rootB.copy()) # Need to double check if crossover affects original roots
+            if (self.get_fitness(a, self.variables) < currBestScore):
+                currBestScore = self.get_fitness(a, self.variables)
+                bestA = a
+                bestB = b
+
+            elif (self.get_fitness(b, self.variables) < currBestScore ):
+                currBestScore = self.get_fitness(b, self.variables)
+                bestA = a
+                bestB = b
+
+        return [bestA, bestB]
 
 
 
