@@ -107,7 +107,7 @@ class generation:
         currBestScore = float_info.max
         bestA = rootA
         bestB = rootB
-        for _ in range(numCrossovers):
+        for _ in range(1):#numCrossovers):
             [a,b] = crossover(rootA.copy(), rootB.copy()) # Need to double check if crossover affects original roots
             if (self.get_fitness(a, self.variables) < currBestScore):
                 currBestScore = self.get_fitness(a, self.variables)

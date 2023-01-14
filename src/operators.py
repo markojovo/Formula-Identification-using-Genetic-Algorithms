@@ -12,10 +12,13 @@ OPERATORS = {
         EVAL_KEY: lambda x, y: x - y, 
         NUM_ARGS_KEY: 2
     }, 
+    
     "*": {
         EVAL_KEY: lambda x, y: x * y, 
         NUM_ARGS_KEY: 2
-    }, 
+    } 
+}
+'''
     "/": {
         EVAL_KEY: lambda x, y: (x / SMALL_DENOM) if (abs(y) < SMALL_DENOM) else x / y,
         NUM_ARGS_KEY: 2
@@ -30,10 +33,6 @@ OPERATORS = {
         NUM_ARGS_KEY: 1
     },
 
-   "cos": {
-        EVAL_KEY: lambda x: cos(x),
-        NUM_ARGS_KEY: 1
-    },
 
     "u_":{
         EVAL_KEY: lambda x: x if x > 0 else 0,
@@ -41,8 +40,8 @@ OPERATORS = {
     }
 
 
+'''
 
-}
 
 
 ''' "sin": {

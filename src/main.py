@@ -43,7 +43,7 @@ for i in range(1000):
 
 
 genNum = 1
-MAX_GEN_NUM = 150000
+MAX_GEN_NUM = 1500
 num_of_gens = 1
 
 best_of_runs = []
